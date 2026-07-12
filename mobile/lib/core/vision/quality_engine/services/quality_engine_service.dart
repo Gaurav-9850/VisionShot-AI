@@ -5,9 +5,10 @@ class QualityEngineService {
   final BrightnessAnalyzer _brightnessAnalyzer = BrightnessAnalyzer();
 
   Future<QualityReport> analyzeImage(String imagePath) async {
+    // Calculate real brightness
     final brightness = await _brightnessAnalyzer.analyze(imagePath);
 
-    // Temporary values
+    // Temporary placeholder values
     const blur = 15.0;
     const contrast = 75.0;
     const sharpness = 85.0;

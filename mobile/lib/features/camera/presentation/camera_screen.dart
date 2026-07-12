@@ -6,6 +6,7 @@ import '../widgets/grid_overlay.dart';
 import '../../../core/vision/quality_engine/services/quality_engine_service.dart';
 import '../../analysis/presentation/analysis_screen.dart';
 
+
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
 
@@ -46,24 +47,28 @@ class _CameraScreenState extends State<CameraScreen> {
 
     if (!_controller!.value.isInitialized) return;
 
+    // Capture photo
     final image = await _controller!.takePicture();
 
+    // Analyze image
     final qualityEngine = QualityEngineService();
 
     final report = await qualityEngine.analyzeImage(image.path);
 
     if (!mounted) return;
 
+    // Open Analysis Screen
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => AnalysisScreen(
           report: report,
+          imagePath: image.path,
         ),
       ),
     );
   } catch (e) {
-    debugPrint(e.toString());
+    debugPrint("Capture Error: $e");
   }
 }
 
