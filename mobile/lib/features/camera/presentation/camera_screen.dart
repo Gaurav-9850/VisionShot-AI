@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../gallery/presentation/photo_preview_screen.dart';
 import '../widgets/camera_controls.dart';
 import '../widgets/grid_overlay.dart';
+import '../../../core/vision/quality_engine/services/quality_engine_service.dart';
+import '../../analysis/presentation/analysis_screen.dart';
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({super.key});
@@ -39,25 +41,31 @@ class _CameraScreenState extends State<CameraScreen> {
   }
 
   Future<void> capturePhoto() async {
-    try {
-      if (_controller == null) return;
+  try {
+    if (_controller == null) return;
 
-      if (!_controller!.value.isInitialized) return;
+    if (!_controller!.value.isInitialized) return;
 
-      final image = await _controller!.takePicture();
+    final image = await _controller!.takePicture();
 
-      if (!mounted) return;
+    final qualityEngine = QualityEngineService();
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PhotoPreviewScreen(imagePath: image.path),
+    final report = await qualityEngine.analyzeImage(image.path);
+
+    if (!mounted) return;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AnalysisScreen(
+          report: report,
         ),
-      );
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+      ),
+    );
+  } catch (e) {
+    debugPrint(e.toString());
   }
+}
 
   @override
   void dispose() {

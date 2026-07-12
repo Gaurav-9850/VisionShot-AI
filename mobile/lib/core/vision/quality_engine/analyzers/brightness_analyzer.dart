@@ -1,15 +1,36 @@
-import '../models/quality_report.dart';
-import 'image_analyzer.dart';
+import 'dart:io';
 
-class BrightnessAnalyzer implements ImageAnalyzer<double> {
+import 'package:image/image.dart' as img;
 
-  @override
-  Future<double> analyze(String imagePath) async {
+class BrightnessAnalyzer {
 
-    // TODO:
-    // OpenCV implementation
+  Future<double> analyze(String path) async {
 
-    return 75;
+    final bytes = await File(path).readAsBytes();
+
+    final image = img.decodeImage(bytes);
+
+    if (image == null) return 0;
+
+    double total = 0;
+
+    for (final pixel in image) {
+
+      total +=
+
+      (pixel.r + pixel.g + pixel.b) / 3;
+
+    }
+
+    return
+
+      total /
+
+      image.length /
+
+      255 *
+
+      100;
 
   }
 

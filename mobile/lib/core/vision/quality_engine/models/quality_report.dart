@@ -1,13 +1,13 @@
 class QualityReport {
   final double brightness;
-  final double contrast;
   final double blur;
+  final double contrast;
   final double sharpness;
 
   const QualityReport({
     required this.brightness,
-    required this.contrast,
     required this.blur,
+    required this.contrast,
     required this.sharpness,
   });
 
