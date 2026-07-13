@@ -12,6 +12,14 @@ class QualityReport {
   });
 
   double get overallScore {
-    return (brightness + contrast + sharpness + (100 - blur)) / 4;
-  }
+  const brightnessWeight = 0.30;
+  const contrastWeight = 0.20;
+  const sharpnessWeight = 0.30;
+  const blurWeight = 0.20;
+
+  return (brightness * brightnessWeight) +
+      (contrast * contrastWeight) +
+      (sharpness * sharpnessWeight) +
+      ((100 - blur) * blurWeight);
+}
 }

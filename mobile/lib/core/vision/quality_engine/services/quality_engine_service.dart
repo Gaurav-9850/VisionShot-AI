@@ -1,22 +1,20 @@
 import '../analyzers/brightness_analyzer.dart';
-import '../models/quality_report.dart';
 import '../analyzers/blur_analyzer.dart';
+import '../analyzers/contrast_analyzer.dart';
+import '../analyzers/sharpness_analyzer.dart';
+import '../models/quality_report.dart';
 
 class QualityEngineService {
-  final BrightnessAnalyzer _brightnessAnalyzer = BrightnessAnalyzer();
+  final _brightness = BrightnessAnalyzer();
+  final _blur = BlurAnalyzer();
+  final _contrast = ContrastAnalyzer();
+  final _sharpness = SharpnessAnalyzer();
 
-  Future<QualityReport> analyzeImage(String imagePath) async {
-    // Calculate real brightness
-    final brightness = await _brightnessAnalyzer.analyze(imagePath);
-
-    
-    final blurAnalyzer = BlurAnalyzer();
-
-    final blur = await blurAnalyzer.analyze(imagePath);
-    
-    // Temporary placeholder values
-    const contrast = 75.0;
-    const sharpness = 85.0;
+  Future<QualityReport> analyzeImage(String path) async {
+    final brightness = await _brightness.analyze(path);
+    final blur = await _blur.analyze(path);
+    final contrast = await _contrast.analyze(path);
+    final sharpness = await _sharpness.analyze(path);
 
     return QualityReport(
       brightness: brightness,
