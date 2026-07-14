@@ -41,10 +41,12 @@ class ProgressTile extends StatelessWidget {
 
         const SizedBox(height: 6),
 
-        LinearProgressIndicator(
-
-          value: value / 100,
-
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: LinearProgressIndicator(
+            minHeight: 12,
+            value: value / 100,
+          ),
         ),
 
         const SizedBox(height: 4),

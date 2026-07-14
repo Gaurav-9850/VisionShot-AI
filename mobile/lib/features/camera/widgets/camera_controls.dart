@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CameraControls extends StatelessWidget {
   final VoidCallback onCapture;
   final VoidCallback onSwitchCamera;
+  final bool canCapture;
 
   const CameraControls({
     super.key,
     required this.onCapture,
     required this.onSwitchCamera,
+    required this.canCapture,
   });
 
   @override
@@ -30,16 +32,27 @@ class CameraControls extends StatelessWidget {
           ),
 
           GestureDetector(
-            onTap: onCapture,
-            child: Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.grey,
-                  width: 4,
+            onTap: canCapture ? onCapture : null,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              opacity: canCapture ? 1.0 : 0.4,
+              child: Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: canCapture ? Colors.white : Colors.grey,
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: Colors.grey.shade700,
+                    width: 4,
+                  ),
+                ),
+                child: Center(
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: canCapture ? Colors.black : Colors.white,
+                    size: 32,
+                  ),
                 ),
               ),
             ),

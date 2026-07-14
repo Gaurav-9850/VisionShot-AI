@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/vision/quality_engine/models/quality_report.dart';
+
 import 'dart:io';
 import '../../../shared/widgets/progress_tile.dart';
 import '../../gallery/services/gallery_service.dart';
+import '../../../core/vision/recommendation_engine/photo_recommendation_service.dart';
+import '../widgets/score_card.dart';
+import '../widgets/recommendation_card.dart';
 
 
 class AnalysisScreen extends StatelessWidget {
@@ -19,13 +23,18 @@ class AnalysisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+      final recommendations =
+      PhotoRecommendationService().generate(report);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Photo Analysis"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
@@ -47,33 +56,44 @@ class AnalysisScreen extends StatelessWidget {
 
             ),
 
-            Text(
-              "Brightness : ${report.brightness.toStringAsFixed(1)}%",
-              style: const TextStyle(fontSize: 20),
+            ProgressTile(
+              title: "Brightness",
+              value: report.brightness,
             ),
 
             const SizedBox(height: 20),
 
-            Text(
-              "Contrast : ${report.contrast.toStringAsFixed(1)}%",
-              style: const TextStyle(fontSize: 20),
+            ProgressTile(
+              title: "Contrast",
+              value: report.contrast,
             ),
 
             const SizedBox(height: 20),
 
-            Text(
-              "Blur : ${report.blur.toStringAsFixed(1)}%",
-              style: const TextStyle(fontSize: 20),
+            ProgressTile(
+              title: "Blur",
+              value: report.blur,
             ),
 
             const SizedBox(height: 20),
 
-            Text(
-              "Sharpness : ${report.sharpness.toStringAsFixed(1)}%",
-              style: const TextStyle(fontSize: 20),
+            ProgressTile(
+              title: "Sharpness",
+              value: report.sharpness,
+            ),
+
+            const SizedBox(height: 25),
+
+            const Divider(),
+
+            const SizedBox(height: 20),
+
+            ScoreCard(
+              score: report.overallScore,
             ),
 
             const SizedBox(height: 30),
+
 
             const Text(
               "Recommendations",
@@ -84,6 +104,21 @@ class AnalysisScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 30),
+
+            
+
+            const SizedBox(height: 10),
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: recommendations
+                  .map(
+                    (tip) => RecommendationCard(
+                      tip: tip,
+                    ),
+                  )
+                  .toList(),
+            ),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -118,25 +153,8 @@ class AnalysisScreen extends StatelessWidget {
               ],
             ),
 
-            const SizedBox(height: 10),
-
-            const ListTile(
-              leading: Icon(
-                Icons.check_circle,
-                color: Colors.green,
-              ),
-              title: Text("Lighting looks good."),
-            ),
-
-            const ListTile(
-              leading: Icon(
-                Icons.check_circle,
-                color: Colors.green,
-              ),
-              title: Text("Image is sharp."),
-            ),
-
-          ],
+           ],
+          ),
         ),
       ),
     );
